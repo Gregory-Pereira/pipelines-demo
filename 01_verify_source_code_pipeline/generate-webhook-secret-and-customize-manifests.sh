@@ -113,6 +113,26 @@ spec:
     lastName: $last_name
     username: $keycloak_user" > ./keycloak-user.yaml
 
+search_term="amd64/linux"
+oc_download_name=$(oc get consoleclidownloads.console.openshift.io -n openshift-console | grep "oc-cli" | awk '{print $1}')
+KEYS=$(oc get consoleclidownloads.console.openshift.io $oc_download_name -n openshift-console -o json | jq '.spec.links[].href | @sh' | cut -d \" -f 2 | cut -d \' -f 2) # dont know if its called oc-cli-downloads on ever cluster
+declare download_types_arr
+download_types_arr=($KEYS)
+
+declare correct_oc_link
+counter=0
+for i in "${download_types_arr[@]}"; do
+  if [[ $i == *"${search_term}"* && -n $search_term ]]; then
+    correct_oc_link=$i
+  fi
+done
+if [[ -z $correct_oc_link ]]; then
+    echo "Unable to find correct oc download link for your architecture and OS.
+Please find the correct binary link for your OS and ARCH from the openshift console, or using the oc binary:
+    \`oc get consoleclidownloads.console.openshift.io oc-cli-downloads -n openshift-console -o json\`.
+Once you have found it, please enter the oc download link as a value in the \`./verify-source-code-triggerbinding.yaml\` file."
+fi
+
 echo "apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
@@ -122,4 +142,6 @@ spec:
   params:
     - name: oidc-user-email
       value: $keycloak_email
+    - name: oc-download-link
+      value: $correct_oc_link
 " > ./verify-source-code-triggerbinding.yaml

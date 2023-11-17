@@ -93,9 +93,11 @@ spec:
             value: $(tt.params.ctfe-public-key)
           - name: OIDC_USER_EMAIL
             value: $(tt.params.oidc-user-email)
+          - name: OC_DOWNLOAD_LINK
+            value: $(tt.params.oc-download-link)
         pipelineRef: 
           name: verify-source-code-pipeline
-        serviceAccountName: pipeline 
+        serviceAccountName: pipeline
         workspaces: 
           - name: shared-data
             volumeClaimTemplate:

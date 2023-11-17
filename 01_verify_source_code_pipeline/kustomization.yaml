@@ -7,4 +7,7 @@ resources:
   - verify-source-code-pipeline.yaml
   - verify-source-code-triggertemplate.yaml
   - verify-source-code-triggerbinding.yaml
+  # - verify-source-code-clusterrole.yaml
+  # - verify-source-code-clusterrolebinding.yaml
+  # - verify-source-code-sa.yaml
   - ./keycloak-user.yaml

@@ -28,7 +28,7 @@ Copy your the name of your pull-secret now.
 Add the name of your pull-secret to the imagePullSecrets and secrets section of the following service account.
 Once you have coppied the secret name, press any key to continue."
 
-sleep 5
+sleep 7
 
 read -s -n 1 key
 
