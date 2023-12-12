@@ -45,6 +45,8 @@ spec:
       name: ctfe-public-key
     - description: Email for the OIDC user.
       name: oidc-user-email
+    # - description: Link where the OC CLI with proper arch can be downloaded.
+    #   name: oc-download-link
   resourcetemplates: 
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -93,8 +95,8 @@ spec:
             value: $(tt.params.ctfe-public-key)
           - name: OIDC_USER_EMAIL
             value: $(tt.params.oidc-user-email)
-          - name: OC_DOWNLOAD_LINK
-            value: $(tt.params.oc-download-link)
+          # - name: OC_DOWNLOAD_LINK
+          #   value: $(tt.params.oc-download-link)
         pipelineRef: 
           name: verify-source-code-pipeline
         serviceAccountName: pipeline

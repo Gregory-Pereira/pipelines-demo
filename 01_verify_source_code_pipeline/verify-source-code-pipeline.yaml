@@ -91,8 +91,8 @@ spec:
           value: $(params.CTFE_PUBLIC_KEY)
         - name: oidc-user-email
           value: $(params.OIDC_USER_EMAIL)
-        - name: oc-download-link
-          value: $(params.OC_DOWNLOAD_LINK)
+        # - name: oc-download-link
+        #   value: $(params.OC_DOWNLOAD_LINK)
       workspaces: 
         - name: repository
           workspace: shared-data

@@ -27,14 +27,21 @@ spec:
       type: string
     - name: oidc-user-email
       type: string
+    # - name: oc-download-link
+    #   type: string
   results:
     - name: log-file
       description: produce the log file as a task result
   steps:
   - name: search-rekor
-    image: registry.redhat.io/rhel9/go-toolset@sha256:f969e6a4fe53663f3fc8d0ddc17ec2fc3def2af8e68ce7061f016a598798f474
+    image: quay.io/grpereir/verify-source@sha256:8a1a4f117d3e11f31e7fb61efd194dfba3af7344307826ea70e6d4d4428ce522
     workingDir: /workspace
     script: |
+
+      # mkdir /opt/app-root/src/bin
+      # cd /opt/app-root/src/bin
+
+      # curl -sLO
 
       ## Installs
       go install github.com/sigstore/rekor/cmd/rekor-cli@v1.3.1

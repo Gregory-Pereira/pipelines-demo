@@ -1,0 +1,22 @@
+FROM registry.redhat.io/rhtas-tech-preview/gitsign-rhel9@sha256:2581f2bf3cce4c20f65164083ef103319e06dc355275e8d9acfda371377bb9f5 AS gitsign
+FROM registry.redhat.io/rhtas-tech-preview/rekor-cli-rhel9@sha256:eca529ea4190dfc1e13f1b085170fa88c0a0e06991d94c40ba87a0b98e324d99 AS rekor-cli
+FROM registry.redhat.io/rhel9/go-toolset@sha256:f969e6a4fe53663f3fc8d0ddc17ec2fc3def2af8e68ce7061f016a598798f474
+
+USER root
+
+COPY --from=gitsign /usr/local/bin/gitsign_cli_linux_amd64.gz /opt/app-root/src
+COPY --from=rekor-cli /usr/local/bin/rekor_cli_linux_amd64.gz /opt/app-root/src
+
+LABEL description="The verify-source image is a rhel9/go-tools base image that includes RHTAS gitsign, RHTAS rekor-cli, and gojq installed."
+LABEL io.k8s.description="The verify-source image is a rhel9/go-tools base image that includes RHTAS gitsign, RHTAS rekor-cli, and gojq installed."
+LABEL io.k8s.display-name="securesign/pipelines-demo verify source code task base image."
+LABEL io.openshift.tags="gitsign, rekor-cli, pipelines-demo, Red Hat trusted artifact signer."
+LABEL summary="Provides rekor-cli, gojq, and gitsign."
+LABEL com.redhat.component="securesign-pipelines-demo"
+
+RUN mkdir /opt/app-root/src/bin && gzip -d /opt/app-root/src/gitsign_cli_linux_amd64.gz && gzip -d /opt/app-root/src/rekor_cli_linux_amd64.gz && \
+    mv /opt/app-root/src/gitsign_cli_linux_amd64 /opt/app-root/src/bin/gitsign && mv /opt/app-root/src/rekor_cli_linux_amd64 /opt/app-root/src/bin/rekor-cli && \
+    curl -sL https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz -o /opt/app-root/src/openshift-client-linux.tar.gz && \
+    tar xvf /opt/app-root/src/openshift-client-linux.tar.gz && mv /opt/app-root/src/oc /opt/app-root/src/bin/oc
+
+USER 1001
